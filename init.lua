@@ -5,12 +5,17 @@ minetest.register_node("curtain:"..color.."_curtain_closed", {
 	tiles = {"wool_"..color..".png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
+	walkable = false,
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, 0.4375, 0.5, 0.5, 0.5},
 		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, 0.3125, 0.5, 0.5, 0.5},
 	},
 	sounds = default.node_sound_defaults(),
 	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3},
@@ -24,12 +29,17 @@ minetest.register_node("curtain:"..color.."_curtain_open", {
 	tiles = {"wool_"..color..".png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
+	walkable = false,
 	drawtype = "nodebox",
 	node_box = {
 		type = "fixed",
 		fixed = {
 			{-0.5, 0.3125, 0.3125, 0.5, 0.5, 0.5},
 		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, 0.3125, 0.5, 0.5, 0.5},
 	},
 	sounds = default.node_sound_defaults(),
 	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3},
@@ -39,12 +49,98 @@ minetest.register_node("curtain:"..color.."_curtain_open", {
 	drop = "curtain:"..color.."_curtain_closed",
 })
 
+minetest.register_node("curtain:large_"..color.."_curtain_closed", {
+	description = "Large "..name.." Curtain",
+	tiles = {"wool_"..color..".png"},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	walkable = false,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -1.5, 0.4375, 0.5, 0.5, 0.5},
+		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.5, -1.5, 0.3125, 0.5, 0.5, 0.5},
+	},
+	sounds = default.node_sound_defaults(),
+	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3},
+	on_rightclick = function(pos, node, puncher)
+		minetest.swap_node(pos, {name = "curtain:large_"..color.."_curtain_open", param2 = node.param2})
+	end,	
+})
+
+minetest.register_node("curtain:large_"..color.."_curtain_open", {
+	description = "Large "..name.." Curtain open",
+	tiles = {"wool_"..color..".png"},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	walkable = false,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, 0.3125, 0.3125, 0.5, 0.5, 0.5},
+		},
+	},
+	selection_box = {
+		type = "fixed",
+		fixed = {-0.5, -1.5, 0.3125, 0.5, 0.5, 0.5},
+	},
+	sounds = default.node_sound_defaults(),
+	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3},
+	on_rightclick = function(pos, node, puncher)
+		minetest.swap_node(pos, {name = "curtain:large_"..color.."_curtain_closed", param2 = node.param2})
+	end,
+	drop = "curtain:large_"..color.."_curtain_closed",
+})
+
+if(minetest.get_modpath("carpet_api")) then
+
 minetest.register_craft({
-	output = "curtain:"..color.."_curtain_closed 6",
+	output = "curtain:"..color.."_curtain_closed",
+	recipe = {
+		{"group:stick"},
+		{"carpet:wool_"..color},
+	}
+})
+
+minetest.register_craft({
+	output = "curtain:"..color.."_curtain_closed",
+	recipe = {
+		{"tools:stick"},
+		{"carpet:"..color.."_wool"},
+	}
+})
+
+else
+
+minetest.register_craft({
+	output = "curtain:"..color.."_curtain_closed 12",
 	recipe = {
 		{"group:stick", "group:stick", "group:stick"},
 		{"wool:"..color, "wool:"..color, "wool:"..color},
 		{"wool:"..color, "wool:"..color, "wool:"..color},
+	}
+})
+
+end
+
+minetest.register_craft({
+	output = "curtain:large_"..color.."_curtain_closed",
+	recipe = {
+		{"curtain:"..color.."_curtain_closed"},
+		{"curtain:"..color.."_curtain_closed"},
+	}
+})
+
+minetest.register_craft({
+	output = "curtain:"..color.."_curtain_closed 2",
+	recipe = {
+		{"curtain:large_"..color.."_curtain_closed"},
 	}
 })
 
