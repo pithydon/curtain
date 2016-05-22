@@ -1,4 +1,4 @@
-function register_curtain(color, name)
+local register_curtain = function (color, name)
 
 minetest.register_node("curtain:"..color.."_curtain_closed", {
 	description = name.." Curtain",
@@ -42,7 +42,7 @@ minetest.register_node("curtain:"..color.."_curtain_open", {
 		fixed = {-0.5, -0.5, 0.3125, 0.5, 0.5, 0.5},
 	},
 	sounds = default.node_sound_defaults(),
-	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3},
+	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,not_in_creative_inventory=1},
 	on_rightclick = function(pos, node, puncher)
 		minetest.swap_node(pos, {name = "curtain:"..color.."_curtain_closed", param2 = node.param2})
 	end,
@@ -91,14 +91,24 @@ minetest.register_node("curtain:large_"..color.."_curtain_open", {
 		fixed = {-0.5, -1.5, 0.3125, 0.5, 0.5, 0.5},
 	},
 	sounds = default.node_sound_defaults(),
-	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3},
+	groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,not_in_creative_inventory=1},
 	on_rightclick = function(pos, node, puncher)
 		minetest.swap_node(pos, {name = "curtain:large_"..color.."_curtain_closed", param2 = node.param2})
 	end,
 	drop = "curtain:large_"..color.."_curtain_closed",
 })
 
-if(minetest.get_modpath("carpet_api")) then
+if minetest.registered_nodes["default:wool_"..color] then
+
+minetest.register_craft({
+	output = "curtain:"..color.."_curtain_closed",
+	recipe = {
+		{"group:stick"},
+		{"default:carpet_"..color},
+	}
+})
+
+elseif (minetest.get_modpath("carpet_api")) then
 
 minetest.register_craft({
 	output = "curtain:"..color.."_curtain_closed",
